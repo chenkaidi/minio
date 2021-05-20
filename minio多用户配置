@@ -1,0 +1,75 @@
+mc命令行工具是minion-client简称，专门用于连接minio-server的
+官方下载地址：https://dl.min.io/client/mc/release/linux-amd64/mc
+配置mc连接server的文件
+mc config host add myminio http://127.0.0.1:9000 minioadmin minioadmin , 这个minioadmin minioadmin 是 key和secret
+生成 ~/.mc/config.json 文件
+查看该文件，会看到 myminio项的信息，表示我把http://127.0.0.1:9000服务命名为myminio
+
+配置如下bucket信息
+zhongfangdianxin
+guotaixindian
+chenan
+zhongshi
+taihuyun
+wubang
+zhonganlianke
+
+先配置权限文件zhongfangdianxin.json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "s3:ListBucket",
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:DeleteObject"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:s3:::zhongfangdianxin/*"
+      ],
+      "Sid": ""
+    }
+  ]
+}
+
+再配置其他json文件
+
+mc admin policy add MinioName PolicyName  PolicyFile 
+policy add设置权限
+mc admin policy add myminio zhongfangdianxin  zhongfangdianxin.json
+mc admin policy add myminio guotaixindian   guotaixindian.json 
+mc admin policy add myminio chenan           chenan.json
+mc admin policy add myminio zhongshi   zhongshi.json     
+mc admin policy add myminio taihuyun   taihuyun.json      
+mc admin policy add myminio wubang       wubang.json     
+mc admin policy add myminio zhonganlianke    zhonganlianke.json 
+
+
+---
+
+添加用户,注意key和secret最少为8位
+mc admin user add myminio回车,分别添加如下信息
+
+zhongfangdianxin/zhongfangdianxin
+guotaixindian/guotaixindian
+chenan00/chenan00
+zhongshi/zhongshi
+taihuyun/taihuyun
+wubang00/wubang00
+zhonganlianke/zhonganlianke
+
+---
+
+权限和用户绑定
+mc admin policy set myminio  zhongfangdianxin user=zhongfangdianxin 
+mc admin policy set myminio  guotaixindian user=guotaixindian
+mc admin policy set myminio  chenan user=chenan00
+mc admin policy set myminio  zhongshi user=zhongshi
+mc admin policy set myminio  taihuyun user=taihuyun
+mc admin policy set myminio  wubang user=wubang00
+mc admin policy set myminio  zhonganlianke user=zhonganlianke
+
+---
+使用其中一个用户key和secret登录看一看
